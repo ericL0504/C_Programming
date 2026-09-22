@@ -11,6 +11,7 @@ void printNum(int n)
 int main()
 {
     int n;
+    printf("정수를 입력하세요");
     scanf("%d", &n);
     printNum(n);
     return 0;
