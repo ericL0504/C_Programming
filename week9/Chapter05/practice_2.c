@@ -1,0 +1,12 @@
+#include <stdio.h>
+int main(void)
+{
+    int num = 1, sum = 0;
+    while (num<=10)
+    {
+        sum += num;
+        num++;
+    }
+    printf("sum = %d\nnum = %d",sum,num);
+    return 0;
+}
