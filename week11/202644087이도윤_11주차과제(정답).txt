@@ -1,0 +1,14 @@
+1. (1)
+
+2. (2)
+
+3. (3)
+
+4.
+(가) p[i].birth.day < p[oldest].birth.day 
+(나) oldest = i
+
+5.
+(가) : p->salary += amount;
+(나) : &emp[index]
+(다) : emp[j].salary < emp[j + 1].salary

@@ -1,0 +1,211 @@
+1. 다음은 학생 한 명의 이름, 학번, 학년을 저장하는 구조체를 선언하고 학번을 출력하는 코드이다.
+빈칸 (가), (나)에 들어갈 코드의 조합으로 알맞은 것을 고르시오.  (   )
+
+#include <stdio.h>
+
+(가) { char name[20]; int id; int grade; } Student;
+
+int main(void) { 
+
+    Student s = {“Hong”, 20261001, 1};
+
+    printf("%s : %d\n", (나));
+
+    return 0;
+
+}
+
+[출력 예시]
+Hong : 20261001
+
+(1) (가) typedef struct Student / (나) s.name, s.id
+(2) (가) typedef struct Student / (나) s->name, s->id
+(3) (가) union Student / (나) s.name, s.id
+(4) (가) typedef Student / (나) s->name, s->id
+
+2.다음은 상품 3개의 가격과 재고 수량을 구조체 배열에 저장한 뒤, 각 상품의 재고 금액을 출력하는 코드이다. 
+빈칸에 들어갈 코드로 알맞은 것을 고르시오.  (   )
+
+#include <stdio.h>
+
+struct Product { int price; int stock; };
+
+int main(void) { 
+
+    struct Product p[3];
+
+    for (int i = 0; i < 3; i++)
+    {
+        scanf("%d", &p[i].price);
+        scanf("%d", &p[i].stock);
+    }
+
+    for (int i = 0; i < 3; i++)
+    {
+        printf("%d\n", (     빈칸     ));
+    }
+
+    return 0;
+
+}
+
+[입력 예시] 
+1000 5 2000 3 1500 4
+[출력 예시]
+5000
+6000
+6000
+
+(1)p.price * p.stock
+(2)p[i].price * p[i].stock
+(3)p[i]->price * p[i]->stock
+(4)p[i].price + p[i].stock
+
+3. 다음은 Employee 구조체 변수의 주소를 포인터 p에 저장한 후, 
+포인터를 통해 직원의 급여를 출력하는 코드이다. 
+빈칸에 들어갈 코드로 알맞은 것을 고르시오.   (   )
+
+#include <stdio.h>
+
+struct Employee { char name[20]; int salary; };
+
+int main(void)
+{
+    struct Employee emp = {"Kim", 3000000};
+
+    struct Employee *p = &emp;
+
+    printf("%s : %d\n", (     빈칸     ));
+
+    return 0;
+}
+
+[출력 예시] Kim : 3000000
+
+(1)p.name, p.salary
+(2)emp -> name, emp->salary
+(3)p->name, p->salary
+(4)*p.name, *p.salary
+
+4. 다음은 Date 구조체를 Person 구조체의 멤버로 사용하여 사람 3명의 이름과 생년월일을 입력받고, 
+가장 나이가 많은 사람의 이름을 출력하는 프로그램이다. 생년월일은 연도, 월, 일 순서로 비교한다. 
+빈칸 2곳에 알맞은 코드를 작성하시오. 
+
+#include <stdio.h>
+
+struct Date { int year; int month; int day; };
+
+struct Person { char name[20]; struct Date birth; };
+
+int main(void) { 
+    
+    struct Person p[3]; int oldest = 0;
+
+    for (int i = 0; i < 3; i++)
+    {
+        scanf("%s", p[i].name);
+        scanf("%d", &p[i].birth.year);
+        scanf("%d", &p[i].birth.month);
+        scanf("%d", &p[i].birth.day);
+    }
+
+    for (int i = 1; i < 3; i++)
+    {
+        if (p[i].birth.year < p[oldest].birth.year ||
+            (p[i].birth.year == p[oldest].birth.year &&
+             p[i].birth.month < p[oldest].birth.month) ||
+            (p[i].birth.year == p[oldest].birth.year &&
+             p[i].birth.month == p[oldest].birth.month &&
+             ( (가) )))
+        {
+            ( (나) );
+        }
+    }
+
+    printf("가장 나이가 많은 사람: %s\n", p[oldest].name);
+
+    return 0;
+
+}
+
+[입력 예시] 
+Hong 2005 3 15 Kim 2004 8 20 Lee 2005 1 10
+
+[출력 예시] 
+가장 나이가 많은 사람: Kim
+
+가 : 
+나 : 
+
+5. 다음은 직원 5명의 이름, 사번, 기본 급여를 입력받은 뒤 특정 직원의 급여를
+인상하고, 급여가 높은 순서대로 정렬하여 출력하는 프로그램이다.
+
+급여 인상 함수는 구조체 포인터를 매개변수로 전달받아 원본 구조체의 급여를 직접 변경한다. 
+정렬은 버블 정렬 방식으로 수행한다. 빈칸 3곳에 알맞은 코드를 작성하시오.
+
+#include <stdio.h>
+
+struct Employee { char name[20]; int id; int salary; };
+
+void increaseSalary(struct Employee *p, int amount) { ( (가) ); }
+
+int main(void) { 
+    
+    struct Employee emp[5], temp; int searchId, amount; int index = -1;
+
+    for (int i = 0; i < 5; i++)
+    {
+        scanf("%s", emp[i].name);
+        scanf("%d", &emp[i].id);
+        scanf("%d", &emp[i].salary);
+    }
+
+    scanf("%d", &searchId);
+    scanf("%d", &amount);
+
+    for (int i = 0; i < 5; i++)
+    {
+        if (emp[i].id == searchId)
+        {
+            index = i;
+            break;
+        }
+    }
+
+    if (index != -1)
+    {
+        increaseSalary(( (나) ), amount);
+    }
+
+    for (int i = 0; i < 4; i++)
+    {
+        for (int j = 0; j < 4 - i; j++)
+        {
+            if ( (다) )
+            {
+                temp = emp[j];
+                emp[j] = emp[j + 1];
+                emp[j + 1] = temp;
+            }
+        }
+    }
+
+    for (int i = 0; i < 5; i++)
+    {
+        printf("%d위: %s %d %d\n",
+               i + 1, emp[i].name, emp[i].id, emp[i].salary);
+    }
+
+    return 0;
+
+}
+
+[입력 예시] Hong 1001 3000000 Kim 1002 2800000 Lee 1003 3500000 Park 1004 3200000 Choi 1005 2900000 1002 500000
+
+[출력 예시] 1위: Lee 1003 3500000 2위: Kim 1002 3300000 3위: Park 1004 3200000 4위: Hong 1001 3000000 5위: Choi 1005 2900000
+
+※ 입력한 사번이 존재하지 않으면 급여 인상은 수행하지 않고 정렬만 진행한다.
+
+(가) : 
+(나) : 
+(다) : 
