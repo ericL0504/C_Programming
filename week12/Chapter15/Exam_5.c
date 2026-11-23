@@ -1,33 +1,32 @@
-#include <iostream>
-using namespace std;
+#include <stdio.h>
+#include <string.h>
 
 struct Student
 {
-    string name;
+    char name[21];
     int score[3];
-    int total;   // 총점
+    int total;
 };
 
-//정올 정답 구역
-void input(Student p[], int n)
+void input(struct Student p[], int n)
 {
     for(int i = 0; i < n; i++)
     {
-        cin >> p[i].name;
+        scanf("%20s", p[i].name);
 
         p[i].total = 0;
 
         for(int j = 0; j < 3; j++)
         {
-            cin >> p[i].score[j];
+            scanf("%d", &p[i].score[j]);
             p[i].total += p[i].score[j];
         }
     }
 }
 
-void sort(Student p[], int n)
+void sort(struct Student p[], int n)
 {
-    Student temp;
+    struct Student temp;
 
     for(int i = 0; i < n - 1; i++)
     {
@@ -43,18 +42,31 @@ void sort(Student p[], int n)
     }
 }
 
-void output(Student p[], int n)
+void output(struct Student p[], int n)
 {
     for(int i = 0; i < n; i++)
     {
-        cout << p[i].name << " ";
+        printf("%s ", p[i].name);
 
         for(int j = 0; j < 3; j++)
         {
-            cout << p[i].score[j] << " ";
+            printf("%d ", p[i].score[j]);
         }
 
-        cout << p[i].total << '\n';
+        printf("%d\n", p[i].total);
     }
 }
-//정올 정답 구역
+
+int main()
+{
+    int n;
+    struct Student p[10];
+
+    scanf("%d", &n);
+
+    input(p, n);
+    sort(p, n);
+    output(p, n);
+
+    return 0;
+}

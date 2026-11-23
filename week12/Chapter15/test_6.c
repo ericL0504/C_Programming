@@ -1,37 +1,36 @@
-#include <iostream>
-#include <string>
-using namespace std;
+#include <stdio.h>
+#include <string.h>
 
 struct Score
 {
-    string name;
+    char name[20];
     int kor;
     int eng;
 };
 
-//정올 정답 구역
-Score plus_(Score a, Score b)
+struct Score plus(struct Score a, struct Score b)
 {
-    Score result;
+    struct Score result;
 
-    result.name = "Total";
+    strcpy(result.name, "Total");
     result.kor = a.kor + b.kor;
     result.eng = a.eng + b.eng;
 
     return result;
 }
-//정올 정답 구역
 
 int main()
 {
-    Score a, b;
-    cin >> a.name >> a.kor >> a.eng;
-    cin >> b.name >> b.kor >> b.eng;
+    struct Score a, b, total;
 
-    Score result = plus_(a, b);
+    scanf("%s %d %d", a.name, &a.kor, &a.eng);
+    scanf("%s %d %d", b.name, &b.kor, &b.eng);
 
-    cout << a.name << " " << a.kor << " " << a.eng << '\n';
-    cout << b.name << " " << b.kor << " " << b.eng << '\n';
-    cout << result.name << " " << result.kor << " " << result.eng << '\n';
+    total = plus(a, b);
+
+    printf("%s %d %d\n", a.name, a.kor, a.eng);
+    printf("%s %d %d\n", b.name, b.kor, b.eng);
+    printf("%s %d %d\n", total.name, total.kor, total.eng);
+
     return 0;
 }

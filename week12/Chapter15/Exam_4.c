@@ -1,5 +1,4 @@
-#include <iostream>
-using namespace std;
+#include <stdio.h>
 
 struct Body
 {
@@ -7,31 +6,27 @@ struct Body
     double weight;
 };
 
-Body makeStudent(Body father, Body mother)
+struct Body makeStudent(struct Body father, struct Body mother)
 {
-    //정올 정답 구역
-    Body student;
+    struct Body student;
 
     student.height = (father.height + mother.height) / 2 + 5;
-    student.weight = (father.weight + mother.weight) / 2 -4.5;
+    student.weight = (father.weight + mother.weight) / 2 - 4.5;
 
     return student;
-    //정올 정답 구역
 }
 
 int main()
 {
-    Body father, mother;
-    cin >> father.height >> father.weight;
-    cin >> mother.height >> mother.weight;
-    
-    Body student = makeStudent(father, mother);
-    
-    cout << "height : " << student.height << "cm" << '\n';
-    cout << "weight : ";
-    cout.setf(ios::fixed);
-    cout.precision(1);
-    cout << student.weight << "kg" << '\n';
-    
+    struct Body father, mother, student;
+
+    scanf("%d %lf", &father.height, &father.weight);
+    scanf("%d %lf", &mother.height, &mother.weight);
+
+    student = makeStudent(father, mother);
+
+    printf("height : %dcm\n", student.height);
+    printf("weight : %.1fkg\n", student.weight);
+
     return 0;
 }
