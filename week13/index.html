@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GPS 이동 경로 시각화</title>
+    
+    <!-- Leaflet.js CSS (API 키 불필요) -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+          crossorigin=""/>
+    
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Malgun Gothic', sans-serif;
+        }
+        #map {
+            width: 100vw;
+            height: 100vh;
+        }
+        .info-box {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.92);
+            padding: 12px 16px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            font-size: 14px;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="info-box" id="status">데이터를 불러오는 중...</div>
+    <div id="map"></div>
+
+    <!-- Leaflet.js JavaScript -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+            crossorigin=""></script>
+
+    <script>
+        // 1. 지도 초기화 (초기 좌표는 첫 데이터 로드 후 자동 재설정됨)
+        const map = L.map('map').setView([42.3634, -71.0984], 15);
+
+        // 2. OpenStreetMap 타일 레이어 추가 (무료, API 키 불필요)
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        // 3. output.json 파일 불러오기
+        fetch('./output.json')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP 오류! 상태 코드: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (!data || data.length === 0) {
+                    document.getElementById('status').innerText = '표시할 GPS 데이터가 없습니다.';
+                    return;
+                }
+
+                const latlngs = []; // 이동 경로를 그릴 좌표 배열
+
+                data.forEach((point, index) => {
+                    // C 코드에서 생성된 키 이름("longtitude") 주의
+                    const lat = point.latitude;
+                    const lng = point.longtitude;
+                    const coord = [lat, lng];
+                    latlngs.push(coord);
+
+                    // 시작점(초록), 도착점(빨강), 경유지(파랑) 색상 구분
+                    let markerColor = '#2b82cb';
+                    let label = `경유지 #${index + 1}`;
+                    if (index === 0) {
+                        markerColor = '#28a745';
+                        label = '출발지 (Start)';
+                    } else if (index === data.length - 1) {
+                        markerColor = '#dc3545';
+                        label = '도착지 (End)';
+                    }
+
+                    // 각 지점에 원형 마커 표시
+                    const marker = L.circleMarker(coord, {
+                        radius: (index === 0 || index === data.length - 1) ? 8 : 5,
+                        fillColor: markerColor,
+                        color: '#ffffff',
+                        weight: 2,
+                        opacity: 1,
+                        fillOpacity: 0.9
+                    }).addTo(map);
+
+                    // 마커 클릭 시 정보 팝업 표시
+                    marker.bindPopup(`
+                        <strong>${label}</strong><br>
+                        정보: ${point.info}<br>
+                        위도: ${lat}<br>
+                        경도: ${lng}
+                    `);
+                });
+
+                // 4. 전체 이동 경로 선(Polyline) 그리기
+                const polyline = L.polyline(latlngs, {
+                    color: '#ff4500',
+                    weight: 4,
+                    opacity: 0.8
+                }).addTo(map);
+
+                // 5. 경로 전체가 한눈에 들어오도록 지도 화면 자동 맞춤
+                map.fitBounds(polyline.getBounds(), { padding: [50, 50] });
+
+                // 우측 상단 상태창 업데이트
+                document.getElementById('status').innerHTML = `
+                    <strong>GPS 경로 로드 완료</strong><br>
+                    총 포인트 수: ${data.length}개<br>
+                    <span style="color:#28a745;">●</span> 출발 &nbsp;
+                    <span style="color:#2b82cb;">●</span> 경유 &nbsp;
+                    <span style="color:#dc3545;">●</span> 도착
+                `;
+            })
+            .catch(error => {
+                console.error('JSON 로드 실패:', error);
+                document.getElementById('status').innerHTML = `
+                    <span style="color:red;"><strong>데이터 로드 실패</strong></span><br>
+                    output.json 파일이 같은 폴더에 있는지,<br>
+                    JSON 문법 오류가 없는지 확인하세요.
+                `;
+            });
+    </script>
+</body>
+</html>
